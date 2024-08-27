@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package kessel.common.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "github.com/project-kessel/common-api/api/kessel/common/v1";
+option java_multiple_files = true;
+option java_package = "org.project_kessel.api.common.v1";
+
+service KesselTestService {
+	rpc DoRpcOne (TestRequest) returns (TestResponse){
+		option (google.api.http) = {
+			get: "/rpc1"
+		};
+	};
+	rpc DoRpcStream (TestStreamRequest) returns (stream TestStreamResponse){
+		option (google.api.http) = {
+			get: "/rpc2"
+		};
+	};
+}
+
+message TestRequest {}
+message TestResponse {
+	string status = 1;
+	uint32 code = 2;
+}
+
+message TestStreamRequest {}
+message TestStreamResponse {
+	string status = 1;
+	uint32 code = 2;
+}
