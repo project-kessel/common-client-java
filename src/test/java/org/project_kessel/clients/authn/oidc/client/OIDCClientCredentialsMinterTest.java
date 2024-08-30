@@ -1,12 +1,14 @@
 package org.project_kessel.clients.authn.oidc.client;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.project_kessel.clients.authn.oidc.client.OIDCClientCredentialsMinter.getExpiryDateFromExpiresIn;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.project_kessel.clients.authn.oidc.client.OIDCClientCredentialsMinter.getExpiryDateFromExpiresIn;
+import org.junit.jupiter.api.Test;
 
 class OIDCClientCredentialsMinterTest {
 
@@ -17,7 +19,8 @@ class OIDCClientCredentialsMinterTest {
             var minter = OIDCClientCredentialsMinter.forClass(defaultMinterClass);
             assertInstanceOf(defaultMinterClass, minter);
         } catch (OIDCClientCredentialsMinter.OIDCClientCredentialsMinterException e) {
-            fail("Creating minter from default implementation name should not throw an OIDCClientCredentialsMinterException");
+            fail("Creating minter from default implementation name "
+                    + "should not throw an OIDCClientCredentialsMinterException");
         }
     }
 
@@ -28,7 +31,8 @@ class OIDCClientCredentialsMinterTest {
             var minter = OIDCClientCredentialsMinter.forClass(testMinterClass);
             assertInstanceOf(testMinterClass, minter);
         } catch (OIDCClientCredentialsMinter.OIDCClientCredentialsMinterException e) {
-            fail("Creating minter from test implementation name should not throw an OIDCClientCredentialsMinterException");
+            fail("Creating minter from test implementation name "
+                    + "should not throw an OIDCClientCredentialsMinterException");
         }
     }
 
@@ -38,7 +42,8 @@ class OIDCClientCredentialsMinterTest {
         try {
             OIDCClientCredentialsMinter.forName(testMinterName);
         } catch (OIDCClientCredentialsMinter.OIDCClientCredentialsMinterException e) {
-            fail("Creating minter from test implementation name should not throw an OIDCClientCredentialsMinterException");
+            fail("Creating minter from test implementation name "
+                    + "should not throw an OIDCClientCredentialsMinterException");
         }
     }
 
@@ -50,7 +55,8 @@ class OIDCClientCredentialsMinterTest {
         } catch (OIDCClientCredentialsMinter.OIDCClientCredentialsMinterException e) {
             return;
         }
-        fail("Creating minter from not existent implementation name should throw an OIDCClientCredentialsMinterException");
+        fail("Creating minter from not existent implementation name "
+                + "should throw an OIDCClientCredentialsMinterException");
     }
 
     @Test
@@ -89,7 +95,9 @@ class OIDCClientCredentialsMinterTest {
         }
 
         @Override
-        public BearerHeader authenticateAndRetrieveAuthorizationHeader(OIDCClientCredentialsAuthenticationConfig.OIDCClientCredentialsConfig clientConfig) throws OIDCClientCredentialsMinterException {
+        public BearerHeader authenticateAndRetrieveAuthorizationHeader(
+                OIDCClientCredentialsAuthenticationConfig.OIDCClientCredentialsConfig clientConfig)
+                throws OIDCClientCredentialsMinterException {
             return null;
         }
     }

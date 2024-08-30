@@ -1,8 +1,7 @@
 package org.project_kessel.clients.authn.oidc.client;
 
-import org.project_kessel.clients.authn.AuthenticationConfig;
-
 import java.util.Optional;
+import org.project_kessel.clients.authn.AuthenticationConfig;
 
 public class OIDCClientCredentialsAuthenticationConfig extends AuthenticationConfig {
     OIDCClientCredentialsConfig credentialsConfig;
@@ -58,7 +57,8 @@ public class OIDCClientCredentialsAuthenticationConfig extends AuthenticationCon
             return oidcClientCredentialsMinterImplementation;
         }
 
-        public void setOidcClientCredentialsMinterImplementation(Optional<String> oidcClientCredentialsMinterImplementation) {
+        public void setOidcClientCredentialsMinterImplementation(
+                Optional<String> oidcClientCredentialsMinterImplementation) {
             this.oidcClientCredentialsMinterImplementation = oidcClientCredentialsMinterImplementation;
         }
     }
