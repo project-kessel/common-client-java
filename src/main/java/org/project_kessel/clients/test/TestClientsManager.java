@@ -10,18 +10,20 @@ import org.project_kessel.clients.KesselClientsManager;
 import org.project_kessel.clients.authn.AuthenticationConfig;
 
 public class TestClientsManager extends KesselClientsManager {
+    private static final String CHANNEL_MANAGER_KEY = TestClientsManager.class.getName();
+
     protected TestClientsManager(Channel channel) {
         super(channel);
     }
-
-    private static final String CHANNEL_MANAGER_KEY = TestClientsManager.class.getName();
 
     public static TestClientsManager forInsecureClients(String targetUrl) {
         return new TestClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forInsecureClients(targetUrl));
     }
 
-    public static TestClientsManager forInsecureClients(String targetUrl, AuthenticationConfig authnConfig) throws RuntimeException {
-        return new TestClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forInsecureClients(targetUrl, authnConfig));
+    public static TestClientsManager forInsecureClients(String targetUrl, AuthenticationConfig authnConfig)
+            throws RuntimeException {
+        return new TestClientsManager(
+                ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forInsecureClients(targetUrl, authnConfig));
     }
 
     public static TestClientsManager forSecureClients(String targetUrl) {
@@ -29,7 +31,8 @@ public class TestClientsManager extends KesselClientsManager {
     }
 
     public static TestClientsManager forSecureClients(String targetUrl, AuthenticationConfig authnConfig) {
-        return new TestClientsManager(ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forSecureClients(targetUrl, authnConfig));
+        return new TestClientsManager(
+                ChannelManager.getInstance(CHANNEL_MANAGER_KEY).forSecureClients(targetUrl, authnConfig));
     }
 
     public static void shutdownAll() {
@@ -44,8 +47,10 @@ public class TestClientsManager extends KesselClientsManager {
         return new TestClient(channel);
     }
 
-    public static class TestClient extends KesselClient<KesselTestServiceGrpc.KesselTestServiceStub,KesselTestServiceGrpc.KesselTestServiceBlockingStub> {
-        protected TestClient(KesselTestServiceGrpc.KesselTestServiceStub asyncStub, KesselTestServiceGrpc.KesselTestServiceBlockingStub blockingStub) {
+    public static class TestClient extends KesselClient<KesselTestServiceGrpc.KesselTestServiceStub,
+            KesselTestServiceGrpc.KesselTestServiceBlockingStub> {
+        protected TestClient(KesselTestServiceGrpc.KesselTestServiceStub asyncStub,
+                             KesselTestServiceGrpc.KesselTestServiceBlockingStub blockingStub) {
             super(asyncStub, blockingStub);
         }
 

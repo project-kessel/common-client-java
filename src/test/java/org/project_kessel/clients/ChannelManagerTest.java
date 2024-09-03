@@ -1,16 +1,18 @@
 package org.project_kessel.clients;
 
-import io.grpc.Channel;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import io.grpc.Channel;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 
 class ChannelManagerTest {
     ChannelManager defaultChannelManager = ChannelManager.getInstance("defaultChannelManager");
@@ -100,7 +102,7 @@ class ChannelManagerTest {
                 final int j = i;
                 service.submit(() -> {
                     Channel channel;
-                    if(j % 2 == 0) {
+                    if (j % 2 == 0) {
                         channel = defaultChannelManager.forInsecureClients("localhost" + j);
                     } else {
                         channel = defaultChannelManager.forSecureClients("localhost" + j);
@@ -128,7 +130,7 @@ class ChannelManagerTest {
                 final int j = i - numberOfThreads * 2 / 3;
                 service.submit(() -> {
                     Channel channel;
-                    if(j % 2 == 0) {
+                    if (j % 2 == 0) {
                         channel = defaultChannelManager.forInsecureClients("localhost" + j);
                     } else {
                         channel = defaultChannelManager.forSecureClients("localhost" + j);
@@ -140,7 +142,7 @@ class ChannelManagerTest {
             }
             latch2.await();
             latch3.await();
-        } catch(Exception e) {
+        } catch (Exception e) {
             fail("Should not have thrown any exception");
         }
     }
@@ -162,8 +164,8 @@ class ChannelManagerTest {
         insecureField.setAccessible(true);
         var secureField = ChannelManager.class.getDeclaredField("secureChannels");
         secureField.setAccessible(true);
-        var insecureChannels = (HashMap<?,?>)insecureField.get(defaultChannelManager);
-        var secureChannels = (HashMap<?,?>)secureField.get(defaultChannelManager);
+        var insecureChannels = (HashMap<?, ?>) insecureField.get(defaultChannelManager);
+        var secureChannels = (HashMap<?, ?>) secureField.get(defaultChannelManager);
 
         assertEquals(2, insecureChannels.size());
         assertEquals(2, secureChannels.size());
@@ -173,34 +175,34 @@ class ChannelManagerTest {
     void testCreateAndShutdownPatternsInternal() throws Exception {
         var insecureField = ChannelManager.class.getDeclaredField("insecureChannels");
         insecureField.setAccessible(true);
-        var insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        var insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
 
         assertEquals(0, insecureChannelsSize);
 
         var channel = defaultChannelManager.forInsecureClients("localhost:8080");
-        insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
         assertEquals(1, insecureChannelsSize);
 
         defaultChannelManager.shutdownChannel(channel);
-        insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
         assertEquals(0, insecureChannelsSize);
 
         /* Shouldn't throw exception if executed twice */
         defaultChannelManager.shutdownChannel(channel);
-        insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
         assertEquals(0, insecureChannelsSize);
 
         var channel2 = defaultChannelManager.forInsecureClients("localhost:8080");
-        insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
         assertEquals(1, insecureChannelsSize);
         assertNotEquals(channel, channel2);
 
         defaultChannelManager.forInsecureClients("localhost:8081");
-        insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
         assertEquals(2, insecureChannelsSize);
 
         defaultChannelManager.shutdownAll();
-        insecureChannelsSize = ((HashMap<?,?>)insecureField.get(defaultChannelManager)).size();
+        insecureChannelsSize = ((HashMap<?, ?>) insecureField.get(defaultChannelManager)).size();
         assertEquals(0, insecureChannelsSize);
     }
 }

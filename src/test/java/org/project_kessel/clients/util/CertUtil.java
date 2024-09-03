@@ -1,6 +1,12 @@
 package org.project_kessel.clients.util;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -20,8 +26,8 @@ public class CertUtil {
                 return;
             }
 
-            try(InputStream certIn = Thread.currentThread().getContextClassLoader().getResourceAsStream(certFileName);
-                BufferedInputStream bis = new BufferedInputStream(certIn)) {
+            try (InputStream certIn = Thread.currentThread().getContextClassLoader().getResourceAsStream(certFileName);
+                    BufferedInputStream bis = new BufferedInputStream(certIn)) {
 
                 CertificateFactory cf = CertificateFactory.getInstance("X.509");
                 while (bis.available() > 0) {

@@ -1,11 +1,6 @@
 package org.project_kessel.clients.authn;
 
 public class AuthenticationConfig {
-    public enum AuthMode {
-        DISABLED,
-        OIDC_CLIENT_CREDENTIALS
-    }
-
     private AuthMode authMode;
 
     public AuthMode mode() {
@@ -14,5 +9,10 @@ public class AuthenticationConfig {
 
     public void setMode(AuthMode authMode) {
         this.authMode = authMode;
+    }
+
+    public enum AuthMode {
+        DISABLED,
+        OIDC_CLIENT_CREDENTIALS
     }
 }

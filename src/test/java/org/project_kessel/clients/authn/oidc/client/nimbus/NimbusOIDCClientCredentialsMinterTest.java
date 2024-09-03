@@ -1,18 +1,21 @@
 package org.project_kessel.clients.authn.oidc.client.nimbus;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.Test;
 import org.project_kessel.clients.authn.CallCredentialsFactoryTest;
 import org.project_kessel.clients.authn.oidc.client.OIDCClientCredentialsMinter;
 import org.project_kessel.clients.fake.FakeIdp;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class NimbusOIDCClientCredentialsMinterTest {
 
     @Test
     void shouldReturnBearerHeaderWhenIdPAuthenticates() {
         var minter = new NimbusOIDCClientCredentialsMinter();
-        var config = CallCredentialsFactoryTest.dummyAuthConfigWithGoodOIDCClientCredentials().clientCredentialsConfig();
+        var config =
+                CallCredentialsFactoryTest.dummyAuthConfigWithGoodOIDCClientCredentials().clientCredentialsConfig();
         OIDCClientCredentialsMinter.BearerHeader bearerHeader = null;
         try {
             FakeIdp fakeIdp = new FakeIdp(8090);
@@ -30,7 +33,8 @@ public class NimbusOIDCClientCredentialsMinterTest {
     @Test
     void shouldThrowExceptionWhenIdPAuthenticationFails() {
         var minter = new NimbusOIDCClientCredentialsMinter();
-        var config = CallCredentialsFactoryTest.dummyAuthConfigWithGoodOIDCClientCredentials().clientCredentialsConfig();
+        var config =
+                CallCredentialsFactoryTest.dummyAuthConfigWithGoodOIDCClientCredentials().clientCredentialsConfig();
         FakeIdp fakeIdp = new FakeIdp(8090, false);
         try {
             fakeIdp.start();
@@ -38,7 +42,7 @@ public class NimbusOIDCClientCredentialsMinterTest {
             fail("Should throw exception if authn is not successful.");
         } catch (OIDCClientCredentialsMinter.OIDCClientCredentialsMinterException e) {
             // success
-        } catch(Exception e) {
+        } catch (Exception e) {
             fail("OIDCClientCredentialsMinterException expected.");
         } finally {
             fakeIdp.stop();

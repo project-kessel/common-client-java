@@ -1,23 +1,27 @@
 package org.project_kessel.clients;
 
-import io.grpc.*;
+import io.grpc.Channel;
+import io.grpc.CompositeChannelCredentials;
+import io.grpc.Grpc;
+import io.grpc.InsecureChannelCredentials;
+import io.grpc.ManagedChannel;
+import io.grpc.TlsChannelCredentials;
+import java.util.HashMap;
+import java.util.Hashtable;
 import org.project_kessel.clients.authn.AuthenticationConfig;
 import org.project_kessel.clients.authn.CallCredentialsFactory;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-
 public final class ChannelManager {
     /* In the scenario where multiple clients are using this library, we need to support multiple channel managers,
-    * so that clients can use separate channels. There may also be scenarios where reusing the same channel manager, and
-    * hence channels, may be desirable. */
-    private static final Hashtable<String,ChannelManager> channelManagers = new Hashtable<>();
+     * so that clients can use separate channels. There may also be scenarios where reusing the same channel manager,
+     * and hence channels, may be desirable. */
+    private static final Hashtable<String, ChannelManager> channelManagers = new Hashtable<>();
 
     private final HashMap<String, ManagedChannel> insecureChannels = new HashMap<>();
     private final HashMap<String, ManagedChannel> secureChannels = new HashMap<>();
 
     public static ChannelManager getInstance(String channelManagerKey) {
-        if(!channelManagers.containsKey(channelManagerKey)) {
+        if (!channelManagers.containsKey(channelManagerKey)) {
             channelManagers.put(channelManagerKey, new ChannelManager());
         }
 
@@ -32,11 +36,13 @@ public final class ChannelManager {
         return insecureChannels.get(targetUrl);
     }
 
-    public synchronized Channel forInsecureClients(String targetUrl, AuthenticationConfig authnConfig) throws RuntimeException {
+    public synchronized Channel forInsecureClients(String targetUrl, AuthenticationConfig authnConfig)
+            throws RuntimeException {
         if (!insecureChannels.containsKey(targetUrl)) {
             try {
                 var channel = Grpc.newChannelBuilder(targetUrl,
-                        CompositeChannelCredentials.create(InsecureChannelCredentials.create(), CallCredentialsFactory.create(authnConfig))).build();
+                        CompositeChannelCredentials.create(InsecureChannelCredentials.create(),
+                                CallCredentialsFactory.create(authnConfig))).build();
                 insecureChannels.put(targetUrl, channel);
             } catch (CallCredentialsFactory.CallCredentialsCreationException e) {
                 throw new RuntimeException(e);
@@ -59,7 +65,8 @@ public final class ChannelManager {
             var tlsChannelCredentials = TlsChannelCredentials.create();
             try {
                 var channel = Grpc.newChannelBuilder(targetUrl,
-                        CompositeChannelCredentials.create(tlsChannelCredentials, CallCredentialsFactory.create(authnConfig))).build();
+                        CompositeChannelCredentials.create(tlsChannelCredentials,
+                                CallCredentialsFactory.create(authnConfig))).build();
                 secureChannels.put(targetUrl, channel);
             } catch (CallCredentialsFactory.CallCredentialsCreationException e) {
                 throw new RuntimeException(e);
@@ -83,7 +90,7 @@ public final class ChannelManager {
         var iter = insecureChannels.entrySet().iterator();
         while (iter.hasNext()) {
             var entry = iter.next();
-            if(entry.getValue() == channelToShutdown) {
+            if (entry.getValue() == channelToShutdown) {
                 entry.getValue().shutdown();
                 iter.remove();
                 return;
@@ -92,7 +99,7 @@ public final class ChannelManager {
         iter = secureChannels.entrySet().iterator();
         while (iter.hasNext()) {
             var entry = iter.next();
-            if(entry.getValue() == channelToShutdown) {
+            if (entry.getValue() == channelToShutdown) {
                 entry.getValue().shutdown();
                 iter.remove();
                 return;

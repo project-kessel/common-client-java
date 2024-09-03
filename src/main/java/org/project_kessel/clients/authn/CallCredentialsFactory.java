@@ -11,13 +11,16 @@ public class CallCredentialsFactory {
 
     public static CallCredentials create(AuthenticationConfig authnConfig) throws CallCredentialsCreationException {
         if (authnConfig == null) {
-            throw new CallCredentialsCreationException("AuthenticationConfig is required to create CallCredentials and must not be null.");
+            throw new CallCredentialsCreationException(
+                    "AuthenticationConfig is required to create CallCredentials and must not be null.");
         }
 
         try {
             switch (authnConfig.mode()) {
-                case DISABLED: return null;
-                case OIDC_CLIENT_CREDENTIALS: return new OIDCClientCredentialsCallCredentials(authnConfig);
+                case DISABLED:
+                    return null;
+                case OIDC_CLIENT_CREDENTIALS:
+                    return new OIDCClientCredentialsCallCredentials(authnConfig);
             }
         } catch (OIDCClientCredentialsCallCredentials.OIDCClientCredentialsCallCredentialsException e) {
             throw new CallCredentialsCreationException("Failed to create OIDCClientCredentialsCallCredentials.", e);
