@@ -180,7 +180,7 @@
             </dependency>
           </dependencies>
         <configuration>
-          <configLocation>google_checks.xml</configLocation>
+          <configLocation>src/main/resources/META-INF/google_checks.xml</configLocation>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <violationSeverity>warning</violationSeverity>
