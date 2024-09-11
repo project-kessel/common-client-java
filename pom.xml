@@ -180,17 +180,17 @@
             </dependency>
           </dependencies>
         <configuration>
-          <configLocation>google_checks.xml</configLocation>
+          <configLocation>src/main/resources/META-INF/google_checks.xml</configLocation>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
           <violationSeverity>warning</violationSeverity>
           <linkXRef>false</linkXRef>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <excludeGeneratedSources>true</excludeGeneratedSources>
         </configuration>
         <executions>
           <execution>
             <id>validate</id>
-            <phase>validate</phase>
             <goals>
               <goal>check</goal>
             </goals>
