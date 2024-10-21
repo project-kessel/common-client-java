@@ -25,13 +25,13 @@ public abstract class KesselClient<A extends AbstractAsyncStub<A>, B extends Abs
         final int DEFAULT_GRPC_DEADLINE_MS = 500;
 
         if (asyncStub.getCallOptions().getDeadline() == null) {
-            this.asyncStub = asyncStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE, TimeUnit.MILLISECONDS);
+            this.asyncStub = asyncStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE_MS, TimeUnit.MILLISECONDS);
         } else {
             this.asyncStub = asyncStub;
         }
 
         if (blockingStub.getCallOptions().getDeadline() == null) {
-            this.blockingStub = blockingStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE, TimeUnit.MILLISECONDS);
+            this.blockingStub = blockingStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE_MS, TimeUnit.MILLISECONDS);
         } else {
             this.blockingStub = blockingStub;
         }
