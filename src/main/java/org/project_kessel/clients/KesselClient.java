@@ -3,6 +3,8 @@ package org.project_kessel.clients;
 import io.grpc.stub.AbstractAsyncStub;
 import io.grpc.stub.AbstractBlockingStub;
 
+import java.util.concurrent.TimeUnit;
+
 public abstract class KesselClient<A extends AbstractAsyncStub<A>, B extends AbstractBlockingStub<B>> {
     protected A asyncStub;
     protected B blockingStub;
@@ -17,8 +19,22 @@ public abstract class KesselClient<A extends AbstractAsyncStub<A>, B extends Abs
     }
 
     protected KesselClient(A asyncStub, B blockingStub) {
-        this.asyncStub = asyncStub;
-        this.blockingStub = blockingStub;
+        /*
+         * Add default grpc deadline if none is specified.
+         */
+        final int DEFAULT_GRPC_DEADLINE = 500;
+
+        if (asyncStub.getCallOptions().getDeadline() == null) {
+            this.asyncStub = asyncStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE, TimeUnit.MILLISECONDS);
+        } else {
+            this.asyncStub = asyncStub;
+        }
+
+        if (blockingStub.getCallOptions().getDeadline() == null) {
+            this.blockingStub = blockingStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE, TimeUnit.MILLISECONDS);
+        } else {
+            this.blockingStub = blockingStub;
+        }
     }
 
 
