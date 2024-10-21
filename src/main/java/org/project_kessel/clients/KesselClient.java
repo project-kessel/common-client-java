@@ -22,7 +22,7 @@ public abstract class KesselClient<A extends AbstractAsyncStub<A>, B extends Abs
         /*
          * Add default grpc deadline if none is specified.
          */
-        final int DEFAULT_GRPC_DEADLINE_MS = 500;
+        final int DEFAULT_GRPC_DEADLINE_MS = 45000;
 
         if (asyncStub.getCallOptions().getDeadline() == null) {
             this.asyncStub = asyncStub.withDeadlineAfter(DEFAULT_GRPC_DEADLINE_MS, TimeUnit.MILLISECONDS);
