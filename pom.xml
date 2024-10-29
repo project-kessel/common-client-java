@@ -54,7 +54,7 @@
     <dependency>
       <groupId>io.grpc</groupId>
       <artifactId>grpc-stub</artifactId>
-      <version>1.68.0</version>
+      <version>1.68.1</version>
     </dependency>
     <!-- Default OIDC implementation. Must be provided by the user. -->
     <dependency>
